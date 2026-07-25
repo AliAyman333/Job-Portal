@@ -134,7 +134,7 @@ if (isset($_GET['toggle']) && isset($_GET['status'])) {
 
     <footer class="bg-dark text-white py-4 mt-5">
         <div class="container text-center">
-            <p>&copy; 2026 Job Portal. All rights reserved by Chetan Pawar.</p>
+            <p>&copy; 2026 Job Portal.</p>
         </div>
     </footer>
 

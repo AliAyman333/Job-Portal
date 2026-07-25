@@ -37,6 +37,7 @@ $seeker_id = $_SESSION['user_id'];
                     <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
                     <li class="nav-item"><a class="nav-link" href="jobs.php">Browse Jobs</a></li>
                     <li class="nav-item"><a class="nav-link" href="applications.php">My Applications</a></li>
+                    <li class="nav-item"><a class="nav-link" href="my-interviews.php">My Interviews</a></li>
                     <li class="nav-item"><a class="nav-link" href="../auth/logout.php">Logout</a></li>
                 </ul>
             </div>

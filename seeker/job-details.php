@@ -91,6 +91,7 @@ $applied = mysqli_num_rows(mysqli_stmt_get_result($stmt));
                     <li class="nav-item"><a class="nav-link" href="profile.php">Profile</a></li>
                     <li class="nav-item"><a class="nav-link" href="jobs.php">Browse Jobs</a></li>
                     <li class="nav-item"><a class="nav-link" href="applications.php">My Applications</a></li>
+                    <li class="nav-item"><a class="nav-link" href="my-interviews.php">My Interviews</a></li>
                     <li class="nav-item"><a class="nav-link" href="../auth/logout.php">Logout</a></li>
                 </ul>
             </div>
@@ -169,7 +170,7 @@ $applied = mysqli_num_rows(mysqli_stmt_get_result($stmt));
 
     <footer class="bg-dark text-white py-4 mt-5">
         <div class="container text-center">
-            <p>&copy; 2026 Job Portal. All rights reserved by Chetan Pawar.</p>
+            <p>&copy; 2026 Job Portal.</p>
         </div>
     </footer>
 
