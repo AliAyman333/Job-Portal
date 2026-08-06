@@ -85,7 +85,7 @@ $seeker_id = $_SESSION['user_id'];
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-history"></i> آخر عمليات البحث</h5>
+                        <h5 class="card-title"><i class="fas fa-history"></i> Search History</h5>
                         <ul class="list-group list-group-flush">
                             <?php while ($h = mysqli_fetch_assoc($historyQ)) { ?>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
