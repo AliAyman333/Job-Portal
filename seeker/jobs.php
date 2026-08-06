@@ -92,16 +92,16 @@ usort($jobs, fn($a, $b) => $b['match']['total'] <=> $a['match']['total']);
     <!-- مربع البحث -->
     <form method="GET" class="mb-4 d-flex">
         <input type="text" name="search" class="form-control me-2"
-               placeholder="ابحث عن وظيفة أو مكان..."
+               placeholder="Search for jobs or locations..."
                value="<?= htmlspecialchars($search) ?>">
-        <button type="submit" class="btn btn-primary">بحث</button>
+        <button type="submit" class="btn btn-primary">Search</button>
         <?php if ($search !== ''): ?>
-            <a href="jobs.php" class="btn btn-outline-secondary ms-2">إلغاء</a>
+            <a href="jobs.php" class="btn btn-outline-secondary ms-2">Cancel</a>
         <?php endif; ?>
     </form>
 
     <?php if ($search !== '' && empty($jobs)): ?>
-        <div class="alert alert-info">لا توجد وظائف مطابقة لبحثك.</div>
+        <div class="alert alert-info">No jobs found matching your search criteria.</div>
     <?php endif; ?>
 
     <div class="row g-3">
