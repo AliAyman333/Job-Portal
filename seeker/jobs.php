@@ -14,7 +14,38 @@ mysqli_stmt_bind_param($stmt, "i", $seeker_id);
 mysqli_stmt_execute($stmt);
 $seeker = mysqli_stmt_get_result($stmt)->fetch_assoc() ?: [];
 
-$jobs_result = mysqli_query($conc, "SELECT * FROM jobs WHERE status='Open' ORDER BY expiry_date ASC");
+// قراءة قيمة البحث من الرابط
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+if ($search !== '') {
+    // تخزين عملية البحث في سجل البحث
+    $insertSearch = mysqli_prepare($conc, "INSERT INTO search_history (seeker_id, search_term) VALUES (?, ?)");
+    mysqli_stmt_bind_param($insertSearch, "is", $seeker_id, $search);
+    mysqli_stmt_execute($insertSearch);
+    mysqli_stmt_close($insertSearch);
+
+    // الاحتفاظ بآخر 3 عمليات بحث فقط لهذا المستخدم
+    $deleteSearch = mysqli_prepare($conc, "DELETE FROM search_history
+        WHERE seeker_id=?
+        AND id NOT IN (
+            SELECT id FROM (
+                SELECT id FROM search_history
+                WHERE seeker_id=?
+                ORDER BY created_at DESC LIMIT 3
+            ) AS keep_ids
+        )");
+    mysqli_stmt_bind_param($deleteSearch, "ii", $seeker_id, $seeker_id);
+    mysqli_stmt_execute($deleteSearch);
+    mysqli_stmt_close($deleteSearch);
+
+    $jobsStmt = mysqli_prepare($conc, "SELECT * FROM jobs WHERE status='Open' AND (title LIKE ? OR location LIKE ?) ORDER BY expiry_date ASC");
+    $searchParam = "%$search%";
+    mysqli_stmt_bind_param($jobsStmt, "ss", $searchParam, $searchParam);
+    mysqli_stmt_execute($jobsStmt);
+    $jobs_result = mysqli_stmt_get_result($jobsStmt);
+} else {
+    $jobs_result = mysqli_query($conc, "SELECT * FROM jobs WHERE status='Open' ORDER BY expiry_date ASC");
+}
 $jobs = [];
 while ($j = mysqli_fetch_assoc($jobs_result)) {
     $j['match'] = calculateMatchScore($seeker, $j);
@@ -57,6 +88,22 @@ usort($jobs, fn($a, $b) => $b['match']['total'] <=> $a['match']['total']);
 
 <div class="container py-5">
     <h2 class="mb-4">Browse Jobs</h2>
+
+    <!-- مربع البحث -->
+    <form method="GET" class="mb-4 d-flex">
+        <input type="text" name="search" class="form-control me-2"
+               placeholder="ابحث عن وظيفة أو مكان..."
+               value="<?= htmlspecialchars($search) ?>">
+        <button type="submit" class="btn btn-primary">بحث</button>
+        <?php if ($search !== ''): ?>
+            <a href="jobs.php" class="btn btn-outline-secondary ms-2">إلغاء</a>
+        <?php endif; ?>
+    </form>
+
+    <?php if ($search !== '' && empty($jobs)): ?>
+        <div class="alert alert-info">لا توجد وظائف مطابقة لبحثك.</div>
+    <?php endif; ?>
+
     <div class="row g-3">
         <?php foreach ($jobs as $job): ?>
             <div class="col-md-6">
